@@ -33,4 +33,8 @@ public class View {
         f.setSize(500, 200);
         f.setVisible(true);
     }
+
+    public static void main(String[] args) {
+        System.out.println("Holas");
+    }
 }
