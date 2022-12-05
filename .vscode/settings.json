@@ -1,0 +1,8 @@
+{
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar",
+    "c:\\Users\\Geovanna Medina\\Downloads\\KWIC (2)teo\\KWIC\\org\\libraries\\json-20220320.jar",
+    "c:\\Users\\Geovanna Medina\\Downloads\\KWIC (2)teo\\KWIC\\org\\libraries\\json-simple-1.1.1.jar"
+  ],
+  "java.configuration.updateBuildConfiguration": "automatic"
+}
