@@ -99,4 +99,31 @@ public class JsonManager {
 
         return new Employee[] {};
     }
+
+    public void deleteEmployeeFromJson(String id) {
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader(this.fileName));
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray employees = (JSONArray) jsonObject.get("employees");
+
+            for (int i = 0; i < employees.size(); i++) {
+                JSONObject employeeObj = (JSONObject) employees.get(i);
+                if (employeeObj.get("id").equals(id)) {
+                    employees.remove(i);
+                    break;
+                }
+            }
+
+            jsonObject.put("employees", employees);
+
+            FileWriter file = new FileWriter(this.fileName);
+            file.write(jsonObject.toJSONString());
+            file.flush();
+            file.close();
+        } catch (IOException | ParseException e1) {
+            e1.printStackTrace();
+        }
+
+    }
 }
