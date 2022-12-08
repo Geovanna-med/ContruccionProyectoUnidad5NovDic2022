@@ -126,4 +126,28 @@ public class JsonManager {
         }
 
     }
+
+    public void AddEmployeeFromJson(Employee e) {
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader(this.fileName));
+            JSONObject jsonObject = (JSONObject) obj;
+            JSONArray employees = (JSONArray) jsonObject.get("employees");
+            JSONObject employee = new JSONObject();
+            employee.put("id", e.getId());
+            employee.put("firstName", e.getFirstName());
+            employee.put("lastName", e.getLastName());
+            employee.put("photo", e.getPhoto());
+            employees.add(employee);
+
+            jsonObject.put("employees", employees);
+
+            FileWriter file = new FileWriter(this.fileName);
+            file.write(jsonObject.toJSONString());
+            file.flush();
+            file.close();
+        } catch (IOException | ParseException e1) {
+            e1.printStackTrace();
+        }
+    }
 }

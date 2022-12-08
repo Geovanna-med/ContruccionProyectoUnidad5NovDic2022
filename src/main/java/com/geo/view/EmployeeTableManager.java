@@ -7,50 +7,59 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.*;
+import javax.swing.table.*;
 
 import com.geo.Employee;
 import com.geo.JsonManager;
 
 public class EmployeeTableManager {
     private JTable table;
+
     String[] columnNames = { "id", "firstName", "lastName", "photo" };
     JsonManager jsonManager = new JsonManager();
     Employee[] info;
     JButton button;
+    JButton button2;
+    JButton button3;
 
-    public EmployeeTableManager(Employee[] info) {
-        this.info = info;
+    private JTextField textfieldID;
+    private JTextField textfieldFirstName;
+    private JTextField textfieldLastName;
+    private JTextField textfieldPhoto;
+    JFrame newFrameTable;
 
+    public DefaultTableModel createModelAdd(Employee[] info) {
         Object[][] data = getEmployeeData(info);
-
         DefaultTableModel model = new DefaultTableModel(data, columnNames) {
-            // Returning the Class of each column will allow different
-            // renderers to be used based on Class
+
             @Override
             public Class getColumnClass(int column) {
                 return getValueAt(0, column).getClass();
             }
         };
+        return model;
+
+    }
+
+    EmployeeTableManager myself = null;
+    AddEmployeeToTable addEmployeeF = null;
+
+    public EmployeeTableManager(Employee[] info, JFrame f) {
+        this.info = info;
+        this.newFrameTable = f;
+        DefaultTableModel model = createModelAdd(info);
 
         this.table = new JTable(model);
 
         table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        button = new JButton("Remove");
+        button = new JButton("Delete Employee");
 
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                // check for selected row first
+
                 if (table.getSelectedRow() != -1) {
-                    // remove selected row from the model
 
                     int col = 0;
                     int row = table.getSelectedRow();
@@ -61,7 +70,50 @@ public class EmployeeTableManager {
                     model.removeRow(table.getSelectedRow());
 
                     jsonManager.deleteEmployeeFromJson(employeeId);
-                    JOptionPane.showMessageDialog(null, "Selected row deleted successfully");
+                    JOptionPane.showMessageDialog(null, "Employee correctly deleted :)");
+                }
+            }
+        });
+
+        button2 = new JButton("Add Employee");
+        myself = this;
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (e.getSource() == button2) {
+                    addEmployeeF = new AddEmployeeToTable(myself);
+
+                    // JOptionPane.showMessageDialog(null, "Selected row deleted successfully");
+                }
+            }
+        });
+
+        textfieldID = new JTextField();
+        textfieldFirstName = new JTextField();
+        textfieldLastName = new JTextField();
+        textfieldPhoto = new JTextField();
+
+        button3 = new JButton("Add ");
+
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (e.getSource() == button3) {
+
+                    Employee newEmployee = new Employee(textfieldID.getText(), textfieldFirstName.getText(),
+                            textfieldLastName.getText(), textfieldPhoto.getText());
+
+                    jsonManager.AddEmployeeFromJson(newEmployee);
+                    Employee[] myNewEmployees = jsonManager.convertJsonToList();
+
+                    DefaultTableModel newModel = createModelAdd(myNewEmployees);
+                    table.setModel(newModel);
+                    addEmployeeF.setVisible(false);
+                    addEmployeeF.clearFields();
+                    JOptionPane.showMessageDialog(null, "Employee correctly added :)");
+
                 }
             }
         });
@@ -92,7 +144,6 @@ public class EmployeeTableManager {
 
         switch (col) {
             case 0:
-                // employee.setId((int) tcl.getNewValue());
                 break;
             case 1:
                 employee.setFirstName(value);
@@ -133,5 +184,29 @@ public class EmployeeTableManager {
 
     public JButton getButton() {
         return button;
+    }
+
+    public JButton getButton2() {
+        return button2;
+    }
+
+    public JButton getButton3() {
+        return button3;
+    }
+
+    public JTextField getTextfieldID() {
+        return textfieldID;
+    }
+
+    public JTextField getTextfieldFirstName() {
+        return textfieldFirstName;
+    }
+
+    public JTextField getTextfieldLasttName() {
+        return textfieldLastName;
+    }
+
+    public JTextField getTextfieldPhoto() {
+        return textfieldPhoto;
     }
 }
