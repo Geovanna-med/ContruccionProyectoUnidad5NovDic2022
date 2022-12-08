@@ -60,4 +60,5 @@ public class JsonValidation {
     public static void main(String[] args) throws IOException, ParseException {
         System.out.println(JsonValidation.readJson());
     }
+
 }
