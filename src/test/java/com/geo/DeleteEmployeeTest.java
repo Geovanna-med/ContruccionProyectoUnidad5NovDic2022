@@ -1,30 +1,24 @@
 package com.geo;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import java.text.ParseException;
 
 import org.junit.Test;
 
 public class DeleteEmployeeTest {
     @Test
-    public void deleteEmployees() {
-        boolean exists = false;
+    public void deleteEmployee() throws ParseException {
+        JsonManager jm = new JsonManager();
+        Employee[] em = jm.convertJsonToList();
 
-        Employee newEmployee = new Employee("3", "Bruice", "Lee", "https://jsonformatter.org/img/tom-cruise.jpg");
+        String idOfEmployeeToDelete = em[0].getId();
 
-        JsonManager manager = new JsonManager();
-        for (Employee employee : manager.convertJsonToList()) {
-            if (employee.getId().equals(newEmployee.getId())) {
-                exists = true;
-                break;
-            }
-        }
+        jm.deleteEmployeeFromJson(idOfEmployeeToDelete);
 
-        assertTrue(exists);
-        assertFalse(newEmployee.getFirstName().isBlank());
-        assertFalse(newEmployee.getLastName().isBlank());
-        assertFalse(newEmployee.getPhoto().isBlank());
-        manager.deleteEmployeeFromJson(newEmployee.getId());
-
+        assertNotEquals(jm.convertJsonToList(), em);
     }
 }
